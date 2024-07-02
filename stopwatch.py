@@ -1,11 +1,14 @@
 import time 
 import json
+import os
 
 class Stopwatch: 
     def __init__(self):
         self.start_time = None
         self.elapsed_time = 0
         self.total_xp = 0
+
+        self.filename = os.path.join(os.path.expanduser("~"), "stopwatch_state.json")
 
     def start(self):
         if self.start_time is None:
@@ -35,17 +38,17 @@ class Stopwatch:
         self.start_time = None
         self.elapsed_time = 0
 
-    def save_state(self, filename="stopwatch_state.json"):
+    def save_state(self):
         state = {
             'start_time': self.start_time,
             'elapsed_time': self.elapsed_time
         }
-        with open(filename, 'w') as f:
+        with open(self.filename, 'w') as f:
             json.dump(state, f)
     
     def load_state(self, filename="stopwatch_state.json"):
         try: 
-            with open(filename, 'r') as f:
+            with open(self.filename, 'r') as f:
                 state = json.load(f)
                 self.start_time = state['start_time']
                 self.elapsed_time = state['elapsed_time']
